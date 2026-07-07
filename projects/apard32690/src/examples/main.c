@@ -41,6 +41,8 @@
 #include "esh_example.h"
 #elif defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 #include "adin1110_standalone_example.h"
+#elif defined(APARD32690_COLOR_SENSOR_EXAMPLE)
+#include "color_sensor_example.h"
 #endif
 
 /***************************************************************************//**
