@@ -36,7 +36,7 @@
 #include "no_os_uart.h"
 #include "no_os_util.h"
 
-#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
 #endif
@@ -46,13 +46,24 @@
 #include "maxim_gpio.h"
 #include "maxim_spi.h"
 
-extern struct no_os_uart_init_param uart_ip;
+#if defined(APARD32690_COLOR_SENSOR_EXAMPLE)
+#include "no_os_i2c.h"
+#include "maxim_i2c.h"
+#include "tcs34725.h"
+#endif
 
-#if defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+extern struct no_os_uart_init_param uart_ip;
+extern struct tcs34725_init_param tcs34725_ip;
+
+#if defined(APARD32690_COLOR_SENSOR_EXAMPLE)
+extern struct tcs34725_init_param tcs34725_ip;
+#endif
+
+#if defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 extern struct adin1110_init_param adin1110_ip;
 #endif
 
-#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
 extern struct lwip_network_param lwip_ip;
 extern struct adin1110_init_param adin1110_ip;
 #endif

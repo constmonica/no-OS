@@ -32,37 +32,51 @@
 *******************************************************************************/
 
 #include "common_data.h"
+#include "parameters.h"
 #include "maxim_gpio.h"
 #include "maxim_spi.h"
 
-#if defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+#if defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 #include "adin1110.h"
 #endif
 
-#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
 #include "adin1110.h"
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
 #endif
 
-struct max_uart_init_param uart_extra_ip = {
-	.flow = MAX_UART_FLOW_DIS
-};
-
 struct no_os_uart_init_param uart_ip = {
-	.device_id = 0,
+	.device_id = UART_DEVICE_ID,
 	.asynchronous_rx = false,
-	.baud_rate = 115200,
+	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = &uart_extra_ip,
-	.platform_ops = &max_uart_ops,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
 };
 
-#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE) || defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+#if defined(APARD32690_COLOR_SENSOR_EXAMPLE)
+#include "tcs34725.h"
+#endif
+#define TCS34725_I2C_ADDR 0x29
 
-struct max_spi_init_param adin1110_spi_extra = {
+const struct no_os_i2c_init_param i2c_param = {
+	.device_id = I2C_DEVICE_ID,
+	.max_speed_hz = 100000,
+	.platform_ops = I2C_OPS,
+	.slave_address = TCS34725_I2C_ADDR,
+	.extra = I2C_EXTRA,
+};
+struct tcs34725_init_param tcs34725_ip = {
+	.comm_param = &i2c_param,
+};
+
+
+#if defined(APARD32690_ECHO_SERVER_EXAMPLE) || defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+
+const struct max_spi_init_param adin1110_spi_extra = {
 	.num_slaves = 1,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
@@ -99,7 +113,7 @@ struct adin1110_init_param adin1110_ip = {
 
 #endif
 
-#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
 
 struct lwip_network_param lwip_ip = {
 	.platform_ops = &adin1110_lwip_ops,
